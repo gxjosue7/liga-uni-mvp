@@ -19,6 +19,7 @@ Zod 4 · date-fns · lucide-react · vitest.
 | `src/lib/auth.ts` / `auth.config.ts` | Auth.js: Credentials + JWT (sem adapter). `auth.config.ts` é seguro para o proxy (sem Prisma) |
 | `src/lib/session.ts` | `getActor`, `requireAdmin`, `requireLeader`: reconsultam o banco a cada request |
 | `src/lib/db.ts` | Singleton Prisma (`server-only`), pool `pg` com `DATABASE_URL` |
+| `src/app/icon.png`, `apple-icon.png` | Favicon (convenção do Next). Gerados do logo em `fotos/FAVICON.webp` (só o emblema dos anéis; o texto some em 16 a 32 px). O Next não aceita WebP: para trocar, gere novos PNGs com o mesmo nome |
 | `prisma.config.ts` | CLI do Prisma lê `DIRECT_URL` (fallback `DATABASE_URL`); seed = `tsx prisma/seed.ts` |
 
 ## 3. Rotas (`src/app/`)
