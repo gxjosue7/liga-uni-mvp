@@ -1,8 +1,18 @@
 # CLAUDE.md — Liga UNI
 
-Lido automaticamente pelo Claude Code. Regras de código, mobile-first e organização de docs herdadas do projeto
-Nascimento Barbearia (o dono pediu o mesmo padrão), adaptadas ao Liga UNI. O que o briefing do produto exclui
-(Sentry, Turnstile, Resend, Sanity, Mercado Pago, Redis, OAuth, storage externo) **não** entra aqui.
+Lido automaticamente pelo Claude Code. Regras de código, mobile-first e organização de docs deste projeto. O que o
+briefing do produto exclui (Sentry, Turnstile, Resend, Sanity, Mercado Pago, Redis, OAuth, storage externo)
+**não** entra aqui.
+
+## Repositório PÚBLICO: o que nunca pode ir para o Git (código, docs, commits, issues)
+
+- Credenciais de qualquer tipo: senhas, `AUTH_SECRET`, tokens, connection strings, `.env*` (só `.env.example`, sem valores).
+- Identificadores de infraestrutura: ID de projeto/branch do Neon, host do banco, URLs de deploy e IDs da Vercel.
+- E-mails de contas reais ou de demonstração (admin/líderes). Os valores vivem só no `.env.local`.
+- Dados pessoais de qualquer pessoa, caminhos locais da máquina e nomes de outros projetos ou clientes do autor.
+- Fraquezas de segurança conhecidas descritas de forma explorável. Registre no plano como "pendente", sem o passo a passo.
+- Antes de cada commit: conferir `git diff --cached` por qualquer item acima. Um segredo que entrou no histórico
+  conta como vazado (rotacione), mesmo que seja removido depois.
 
 ---
 
@@ -140,8 +150,8 @@ conteúdo de `.env*` em conversa, log ou arquivo versionado.
 
 - Nunca criar branch sem pedido explícito. Commits em português, no imperativo
   (`Adiciona fila de reservas do admin`). Nunca commitar `.env*`, `node_modules/`, `.next/`, `src/generated/`.
-- **Sem rodapé `Co-Authored-By` nos commits**, como no Nascimento (a Vercel Hobby recusa colaborador extra em repo privado).
-- Repositório ainda não foi publicado no GitHub: não criar remoto nem dar push sem pedido.
+- **Sem rodapé `Co-Authored-By` nos commits** (a Vercel Hobby pode recusar o deploy por colaborador extra).
+- O repositório é público no GitHub, branch `main`. Nunca reescrever histórico nem dar force push sem pedido explícito.
 
 ## Testes e verificação
 

@@ -113,4 +113,4 @@ Idempotente. Credenciais vêm de `ADMIN_*`/`LEADER1_*`/`LEADER2_*` (sem senha no
   não bloqueia as partes. Hierarquia de salas ficou fora do MVP.
 - Datas: sempre via `datetime.ts`; `new Date('2026-02-31T…')` no V8 não falha (vira 03-03).
 - `Date.now()` não pode ficar em componente (regra de pureza do React): calcule no serviço (ver `isPast`).
-- Sem rate limiting no login (fora do MVP). Ver `docs/AI-STATE.md`.
+- Limite de tentativas de login: planejado para depois do MVP. Ver `docs/AI-STATE.md`.

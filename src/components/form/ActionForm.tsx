@@ -57,7 +57,13 @@ export function ActionForm({ action, submit, hidden, children, className }: Acti
   const { notify } = useToast()
 
   async function handleAction(previous: ActionState, formData: FormData): Promise<ActionState> {
-    const next = await action(previous, formData)
+    let next: ActionState
+    try {
+      next = await action(previous, formData)
+    } catch {
+      // Página aberta de um deploy anterior (a ação não existe mais no servidor) ou rede caída.
+      return { status: 'error', message: 'Esta página ficou desatualizada ou a conexão falhou. Recarregue a página e tente de novo.' }
+    }
     if (next.status === 'success') {
       if (next.message) notify(next.message)
       closeDialog?.()

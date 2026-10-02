@@ -13,8 +13,8 @@ Sistema novo. Admin (equipe do Ágora) cria entidades e líderes, administra sal
 cadastra membros e eventos da própria entidade e solicita salas. Conflito de horário na mesma sala é barrado.
 
 ## Mudanças técnicas
-- Next 16 + Prisma 7/Neon + Auth.js v5 (JWT, sem adapter), seguindo a stack do Nascimento Barbearia e, a pedido do dono,
-  as regras de código/mobile-first dela (`CLAUDE.md` próprio, sem Sentry/Turnstile/Resend).
+- Next 16 + Prisma 7/Neon + Auth.js v5 (JWT, sem adapter), com regras de código e mobile-first próprias em
+  `CLAUDE.md` (sem Sentry/Turnstile/Resend).
 - Camadas: Server Actions finas (`src/actions`) → serviços com `Actor` explícito (`src/server`) → infra (`src/lib`).
   O líder nunca informa `entityId`; ele vem do ator e entra no `where`.
 - Conflito de sala em duas camadas: checagem na aplicação e `EXCLUDE USING gist` no Postgres (migration SQL, motivo
@@ -29,7 +29,11 @@ Projeto novo, tudo em `agora-uni-mvp/`: `prisma/` (schema, 2 migrations, seed), 
 `docs/`, `CLAUDE.md`, configs (Next, Tailwind, ESLint, Vitest, Prisma).
 
 ## Banco de dados
-Migrations criadas (`init`, `reservation_no_overlap`) e seed escrito; **nada aplicado ainda**.
+Migrations (`init`, `reservation_no_overlap`) aplicadas e seed rodado. A primeira tentativa falhou por lixo no SQL
+gerado (ver `docs/bugs-conhecidos/`).
+
+## Deploy
+Repositório publicado no GitHub e conectado à Vercel. Favicon adicionado depois, a partir do logo do Ágora.
 
 ## Pendências / próximos passos
-Ver `docs/AI-STATE.md` (ligar o Neon, migrar, semear e percorrer os 10 cenários em `localhost`).
+Ver `docs/AI-STATE.md`.
