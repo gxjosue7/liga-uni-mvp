@@ -22,7 +22,7 @@ npm run dev                    # http://localhost:3000
 | `DATABASE_URL` | Connection string do Neon (com pooler), usada pelo app |
 | `DIRECT_URL` | Connection string direta do Neon, usada pelo Prisma CLI (migrate/seed) |
 | `AUTH_SECRET` | Segredo do Auth.js (`npx auth secret`) |
-| `AUTH_URL` | Opcional; `http://localhost:3000` em local (a Vercel detecta sozinha) |
+| `AUTH_URL` | **Não defina.** O app usa o host da requisição; um valor `localhost` na Vercel quebra redirecionamentos |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` | Conta admin criada pelo seed |
 | `LEADER1_EMAIL/PASSWORD`, `LEADER2_EMAIL/PASSWORD` | Líderes das 2 entidades demo |
 

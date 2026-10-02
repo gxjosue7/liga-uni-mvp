@@ -1,14 +1,19 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
 import { ActionForm } from '@/components/form/ActionForm'
 import { TextField } from '@/components/form/Fields'
 import { Logo } from '@/components/layout/Logo'
 import { SITE } from '@/config/site'
 import { loginAction } from '@/app/login/actions'
+import { getActor, homeFor } from '@/lib/session'
 
 export const metadata: Metadata = { title: 'Entrar' }
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const actor = await getActor()
+  if (actor) redirect(homeFor(actor.role))
+
   return (
     <div className="min-h-dvh md:grid md:grid-cols-[1fr_28rem] lg:grid-cols-[1fr_32rem]">
       <section className="grid-plan relative hidden bg-brand md:flex md:flex-col md:justify-between md:p-12">

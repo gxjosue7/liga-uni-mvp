@@ -26,6 +26,10 @@ export async function loginAction(_previous: ActionState, formData: FormData): P
   return result
 }
 
+// Sem redirectTo: o Auth.js monta a URL de destino a partir de AUTH_URL, e um
+// AUTH_URL apontando para localhost mandava o logout de produção para lá. O
+// redirect relativo do Next usa sempre o host da requisição.
 export async function logoutAction() {
-  await signOut({ redirectTo: '/login' })
+  await signOut({ redirect: false })
+  redirect('/login')
 }
