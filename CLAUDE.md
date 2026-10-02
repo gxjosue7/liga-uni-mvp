@@ -156,6 +156,8 @@ conteúdo de `.env*` em conversa, log ou arquivo versionado.
 ## Testes e verificação
 
 - `npm run lint`, `npm run type-check`, `npm test` (regras puras: datas, validação, conflito), `npm run build`.
+- `npm run test:integration`: regras críticas contra o banco do `.env.local` (cria e remove dados `itest-*`). Rode ao
+  mexer em `src/server/` ou nas migrations.
 - Verificação de fluxo: `npm run dev` e conferir em `localhost` no navegador, contra o Neon. Sem Docker.
 
 ## Comandos

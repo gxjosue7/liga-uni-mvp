@@ -15,7 +15,7 @@ Zod 4 · date-fns · lucide-react · vitest.
 
 | Arquivo | Papel |
 |---|---|
-| `src/proxy.ts` | Redirecionamento grosso por perfil (UX). **Não é a segurança**: matcher só cobre `/login`, `/admin/*`, `/lider/*` |
+| `src/proxy.ts` | Redirecionamento grosso por perfil (UX). **Não é a segurança**: matcher só cobre `/admin/*` e `/lider/*`. `/login` fica fora de propósito (a página decide pelo banco; ver `docs/bugs-conhecidos/`) |
 | `src/lib/auth.ts` / `auth.config.ts` | Auth.js: Credentials + JWT (sem adapter). `auth.config.ts` é seguro para o proxy (sem Prisma) |
 | `src/lib/session.ts` | `getActor`, `requireAdmin`, `requireLeader`: reconsultam o banco a cada request |
 | `src/lib/db.ts` | Singleton Prisma (`server-only`), pool `pg` com `DATABASE_URL` |
@@ -101,6 +101,13 @@ Migrations:
 `nova.startAt < existente.endAt E nova.endAt > existente.startAt`, mesma sala, só PENDING/APPROVED bloqueiam.
 Duas camadas: `findConflict` (mensagem amigável) e a constraint (garantia). `isOverlapViolation` traduz o erro do
 Postgres (23P01) na mesma mensagem. Aprovar/recusar só age em PENDING (`updateMany` com `status: 'PENDING'`).
+
+## 8.1 Testes
+
+- `npm test`: unitários (`src/**/*.test.ts`): datas, validações, reconhecimento do erro de conflito. Sem banco.
+- `npm run test:integration`: `tests/integration/rules.test.ts` contra o banco do `.env.local`. Cria dados com prefixo
+  `itest-` e apaga tudo no final. Cobre isolamento entre entidades, calendário por perfil, conflito de sala, aprovar/recusar/
+  cancelar, sala desativada, constraint do Postgres e corrida entre duas requisições. Roda à parte, nunca no `npm test`.
 
 ## 9. Seed (`prisma/seed.ts`)
 

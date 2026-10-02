@@ -16,15 +16,24 @@ histórico (`docs/sessoes-claude/`, `docs/bugs-conhecidos/`). Mantenha curto: re
 - Repositório público no GitHub, branch `main`, conectado à Vercel.
 - Favicon: `src/app/icon.png`, `apple-icon.png` e `favicon.ico`, gerados do logo em `fotos/`.
 
+## Verificado (2026-10-02)
+- `npm run test:integration` (25 testes, banco real): isolamento entre entidades, calendário por perfil, conflito de
+  sala (inclusive a constraint do Postgres e a corrida entre 2 requisições), aprovar/recusar/cancelar, sala desativada.
+- Ponta a ponta por HTTP (37 checagens): login real, redirecionamento por perfil, todas as rotas de admin e líder
+  respondendo com dados reais, líder sem acesso a `/admin`, logout.
+- Bug achado e corrigido: loop de redirecionamento para usuário desativado com sessão antiga.
+
 ## Próximos passos (ordem)
-1. Percorrer os 10 cenários do briefing no app publicado ou em `localhost` (admin e líder). Em especial: conflito de
-   sala (a mensagem do erro do banco só foi testada por unidade) e isolamento entre entidades.
+1. Clicar nos diálogos e formulários no navegador (criar membro, evento, solicitar sala, aprovar/recusar): as regras
+   estão testadas na camada de serviço, mas o comportamento de `ActionForm`/`Dialog`/toast no navegador ainda não.
 2. Revisão visual das telas autenticadas em 375px (só o login foi visto até agora).
 3. Rodar a skill `web-design-guidelines` sobre `src/components` e `src/app`.
 4. Antes do uso real: trocar as senhas do seed e apagar as entidades de demonstração.
 5. Pós-MVP: limite de tentativas de login e fluxo de redefinição de senha.
 
 ## Pontos de atenção
+- Não definir `AUTH_URL` na Vercel: um valor `localhost` mandava o logout de produção para lá. O logout agora usa
+  redirect relativo, mas a variável errada ainda pode afetar outras URLs do Auth.js.
 - Deploy novo logo depois de abrir uma página pode dar erro de Server Action "não encontrada" até recarregar
   (página de um deploy anterior). O formulário já mostra mensagem amigável; `src/app/error.tsx` cobre o resto.
 - `isOverlapViolation` reconhece o erro do banco por nome da constraint/SQLSTATE. Se o formato mudar, a corrida ainda é
