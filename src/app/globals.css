@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tokens da Liga UNI. Marca Ágora: amarelo-sinal, preto e branco, em cima de
+   um cinza frio. Contrastes conferidos: ink/branco 17:1, ink-muted/branco 6:1,
+   ink/brand 12:1. O amarelo nunca é cor de texto sobre fundo claro. */
+:root {
+  --paper: #f3f4f6;
+  --surface: #ffffff;
+  --ink: #121315;
+  --ink-soft: #33373d;
+  --ink-muted: #596069;
+  --line: #dcdfe4;
+  --line-strong: #b9bec6;
+  --brand: #ffce00;
+  --brand-deep: #e0b400;
+  --brand-soft: #fff6c7;
+  --event: #2740d9;
+  --event-soft: #e8ebfc;
+  --ok: #17803d;
+  --ok-soft: #e1f3e8;
+  --danger: #c42b2b;
+  --danger-deep: #a42222;
+  --danger-soft: #fbe6e4;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+    font-stretch: 100%;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-stretch: 112%;
+    @apply font-bold tracking-tight;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  dialog::backdrop {
+    background: rgb(18 19 21 / 0.55);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .display {
+    font-stretch: 112%;
+    @apply font-bold tracking-tight;
+  }
+
+  /* Malha de projeto, eco da fachada modular do Ágora UNI. */
+  .grid-plan {
+    background-image:
+      linear-gradient(to right, rgb(18 19 21 / 0.09) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(18 19 21 / 0.09) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}

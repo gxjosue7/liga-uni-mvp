@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  LEADER
+}
+
+enum ReservationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+model Entity {
+  id          String   @id @default(cuid(2))
+  name        String
+  acronym     String?
+  institution String
+  description String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  leader       User?
+  members      Member[]
+  events       CalendarEvent[]
+  reservations Reservation[]
+
+  @@index([institution])
+}
+
+model User {
+  id           String   @id @default(cuid(2))
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role
+  // @unique garante "1 líder principal por entidade"; ADMIN fica com NULL.
+  entityId     String?  @unique
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  entity       Entity?         @relation(fields: [entityId], references: [id])
+  events       CalendarEvent[]
+  requested    Reservation[]   @relation("ReservationRequester")
+  reviewed     Reservation[]   @relation("ReservationReviewer")
+}
+
+model Member {
+  id        String   @id @default(cuid(2))
+  entityId  String
+  name      String
+  email     String?
+  phone     String?
+  course    String
+  semester  Int?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  entity Entity @relation(fields: [entityId], references: [id])
+
+  @@index([entityId, active])
+  @@index([course])
+}
+
+model Room {
+  id          String   @id @default(cuid(2))
+  name        String
+  building    String?
+  capacity    Int?
+  description String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reservations Reservation[]
+
+  @@index([active])
+}
+
+model CalendarEvent {
+  id          String   @id @default(cuid(2))
+  entityId    String
+  createdById String
+  title       String
+  description String?
+  startAt     DateTime
+  endAt       DateTime
+  location    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  entity    Entity @relation(fields: [entityId], references: [id])
+  createdBy User   @relation(fields: [createdById], references: [id])
+
+  @@index([entityId])
+  @@index([startAt, endAt])
+}
+
+// Conflito de sala: ver prisma/migrations/*_reservation_no_overlap — a
+// EXCLUDE constraint (range + btree_gist) não é modelável no schema Prisma.
+model Reservation {
+  id              String            @id @default(cuid(2))
+  entityId        String
+  requesterId     String
+  roomId          String
+  title           String
+  purpose         String
+  startAt         DateTime
+  endAt           DateTime
+  status          ReservationStatus @default(PENDING)
+  rejectionReason String?
+  reviewedById    String?
+  reviewedAt      DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  entity    Entity @relation(fields: [entityId], references: [id])
+  requester User   @relation("ReservationRequester", fields: [requesterId], references: [id])
+  room      Room   @relation(fields: [roomId], references: [id])
+  reviewer  User?  @relation("ReservationReviewer", fields: [reviewedById], references: [id])
+
+  @@index([entityId, status])
+  @@index([roomId, startAt, endAt])
+  @@index([status, startAt])
+}
